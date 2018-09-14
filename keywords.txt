@@ -1,0 +1,25 @@
+##########################################
+# Syntax Colouring Map For GOTPIDLoop
+##########################################
+
+##########################################
+# Datatypes (KEYWORD1)
+##########################################
+
+GOTSpeedController		KEYWORD1
+
+##########################################
+# Methods and Functions (KEYWORD2)
+##########################################
+
+setSensorPins			KEYWORD2
+setOutputPins			KEYWORD2
+setup				KEYWORD2
+execute				KEYWORD2
+adjustSpeed			KEYWORD2
+emergencyStop			KEYWORD2
+
+##########################################
+# Constants (LITERAL1)
+##########################################
+

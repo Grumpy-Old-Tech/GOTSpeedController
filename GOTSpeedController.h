@@ -45,8 +45,8 @@ class GOTSpeedController
   public:
     GOTSpeedController();
     
-    void setSensorPins(int hall1, int hall2, int hall3);
-    void setOutputPins(int aTop, int bTop, int cTop, int aBot, int bBot, int cBot);
+    void setSensorPins(uint8 hall1, uint8 hall2, uint8 hall3);
+    void setOutputPins(uint8 aTop, uint8 bTop, uint8 cTop, uint8 aBot, uint8 bBot, uint8 cBot);
     void setup();
     void execute();
     void adjustSpeed(float speedRequest);
@@ -69,15 +69,15 @@ class GOTSpeedController
     int           lastCommutationPostion;
     unsigned long lastSpeedTime;
     
-    int hall1Pin;
-    int hall2Pin;
-    int hall3Pin;
-    int aTopPin;
-    int bTopPin;
-    int cTopPin;
-    int aBotPin;
-    int bBotPin;
-    int cBotPin;
+    uint8 hall1Pin;
+    uint8 hall2Pin;
+    uint8 hall3Pin;
+    uint8 aTopPin;
+    uint8 bTopPin;
+    uint8 cTopPin;
+    uint8 aBotPin;
+    uint8 bBotPin;
+    uint8 cBotPin;
 };
 
 #endif

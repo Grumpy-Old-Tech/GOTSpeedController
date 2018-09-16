@@ -19,4 +19,4 @@ This Class is designed to be called on everytime the loop processes. It is also 
 The motor speed is set using the adjustSpeed() method, a drive signal of 0 is used to set the motor to the stationary. Negative reading will cause the motor to run in reverse, positive in the forward direction. An Emergency Stop method emergencyStop() is also provided.
 
 ## SPEED MEASUREMENT
-The motor speed can be read by accessing the motorSpeed property.
+The motor speed can be read by accessing the motorSpeed property. As part of the setup process you need to call setSensorPerRev() with the number of times the hall effect sensor activates per rotor revolution.

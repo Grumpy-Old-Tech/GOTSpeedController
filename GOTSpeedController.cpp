@@ -25,10 +25,7 @@
 
 #include "Arduino.h"
 #include "GOTSpeedController.h"
-
-#if defined(BOARD_generic_stm32f103c)
 #include <HardwareTimer.h>
-#endif
 
 GOTSpeedController::GOTSpeedController() {
     
@@ -36,6 +33,7 @@ GOTSpeedController::GOTSpeedController() {
     pwmtimer3 = new HardwareTimer(3);
     speedReference = 0;
     operatingMode = NO_DRIVE;
+    sensorPerRev = 1;
 }
 
 void GOTSpeedController::setSensorPins(uint8 hall1, uint8 hall2, uint8 hall3) {
@@ -53,6 +51,11 @@ void GOTSpeedController::setOutputPins(uint8 aTop, uint8 bTop, uint8 cTop, uint8
     aBotPin = aBot;
     bBotPin = bBot;
     cBotPin = cBot;
+}
+
+void setGOTSpeedController::SensorPerRev(int number) {
+    
+    sensorPerRev = number;
 }
 
 void GOTSpeedController::setup() {
@@ -144,7 +147,7 @@ void GOTSpeedController::calculateMotorSpeed(int commutationPosition) {
         
         unsigned long currentSpeedTime = micros();
         float revolutionDuration = (lastSpeedTime - currentSpeedTime) / 1000000.0;
-        float revolutionFrequency = 1 / (revolutionDuration * SENSOR_PER_REV);
+        float revolutionFrequency = 1 / (revolutionDuration * sensorPerRev);
         motorSpeed = revolutionFrequency / 60.0;
         lastSpeedTime = currentSpeedTime;
     }

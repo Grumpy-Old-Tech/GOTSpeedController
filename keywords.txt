@@ -18,6 +18,7 @@ setup				KEYWORD2
 execute				KEYWORD2
 adjustSpeed			KEYWORD2
 emergencyStop			KEYWORD2
+setSensorPerRev			KEYWORD2
 
 ##########################################
 # Constants (LITERAL1)

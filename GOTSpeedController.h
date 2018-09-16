@@ -30,7 +30,6 @@
 #include <HardwareTimer.h>
 
 #define PWM_MAX           2000
-#define SENSOR_PER_REV    1             // Used to calculate speed - number of times sensors activate per rev <-------- needs to be chaanged for calibration
 
 // Drive Modes
 #define FORWARD_DRIVE     0
@@ -47,6 +46,7 @@ class GOTSpeedController
     
     void setSensorPins(uint8 hall1, uint8 hall2, uint8 hall3);
     void setOutputPins(uint8 aTop, uint8 bTop, uint8 cTop, uint8 aBot, uint8 bBot, uint8 cBot);
+    void setSensorPerRev(int number);
     void setup();
     void execute();
     void adjustSpeed(float speedRequest);
@@ -68,6 +68,7 @@ class GOTSpeedController
     int           operatingMode;
     int           lastCommutationPostion;
     unsigned long lastSpeedTime;
+    int           sensorPerRev;
     
     uint8 hall1Pin;
     uint8 hall2Pin;

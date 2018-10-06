@@ -89,7 +89,7 @@ void GOTSpeedController::setup() {
     pwmtimer3->refresh();
     pwmtimer3->resume();
     
-    commutationOff();
+    commutationNoDrive();
 }
 
 void GOTSpeedController::execute() {
@@ -100,17 +100,14 @@ void GOTSpeedController::execute() {
     
     switch (operatingMode)
     {
-        case ESTOP:
-            commutationEStop();
-            break;
-        case FORWARD_DRIVE:
-            commutationForwardDrive(commutationPostion);
+        case FWD_DRIVE:
+            commutationFwdDrive(commutationPostion);
             break;
         case NO_DRIVE:
             commutationOff();
             break;
-        case REVERSE_DRIVE:
-            commutationReverseDrive(commutationPostion);
+        case REV_DRIVE:
+            commutationRevDrive(commutationPostion);
             break;
         default:
             break;
@@ -121,11 +118,11 @@ void GOTSpeedController::adjustSpeed(float speedRequest) {
     
   if (speedRequest > 0) {
         
-    operatingMode = FORWARD_DRIVE;
+    operatingMode = FWD_DRIVE;
   }
   else if (speedRequest < 0) {
         
-    operatingMode = REVERSE_DRIVE;
+    operatingMode = REV_DRIVE;
   }
   else {
         
@@ -138,7 +135,7 @@ void GOTSpeedController::adjustSpeed(float speedRequest) {
 void GOTSpeedController::emergencyStop() {
     
     speedReference = 0;
-    operatingMode = ESTOP;
+    operatingMode = NO_DRIVE;
 }
 
 void GOTSpeedController::calculateMotorSpeed(int commutationPosition) {
@@ -154,7 +151,7 @@ void GOTSpeedController::calculateMotorSpeed(int commutationPosition) {
     lastCommutationPostion = commutationPosition;
 }
 
-void GOTSpeedController::commutationOff() {
+void GOTSpeedController::commutationNoDrive() {
     
     pwmWrite(aTopPin,0);
     pwmWrite(bTopPin,0);
@@ -164,24 +161,14 @@ void GOTSpeedController::commutationOff() {
     pwmWrite(cBotPin,0);
 }
 
-void GOTSpeedController::commutationEStop() {
-    
-    pwmWrite(aTopPin,0);
-    pwmWrite(bTopPin,0);
-    pwmWrite(cTopPin,0);
-    pwmWrite(aBotPin,PWM_MAX);
-    pwmWrite(bBotPin,PWM_MAX);
-    pwmWrite(cBotPin,PWM_MAX);
-}
-
 // 0 - 2000 speedRequest
-void GOTSpeedController::commutationForwardDrive(int commutationPosition) {
+void GOTSpeedController::commutationFwdDrive(int commutationPosition) {
     
     switch (commutationPosition)
     {
         case 5:
             pwmWrite(aTopPin,0);
-            pwmWrite(bTopPin,PWM_MAX);
+            pwmWrite(bTopPin,speedReference);
             pwmWrite(cTopPin,0);
             pwmWrite(aBotPin,0);
             pwmWrite(bBotPin,0);
@@ -189,7 +176,7 @@ void GOTSpeedController::commutationForwardDrive(int commutationPosition) {
             break;
         case 1:
             pwmWrite(aTopPin,0);
-            pwmWrite(bTopPin,PWM_MAX);
+            pwmWrite(bTopPin,speedReference);
             pwmWrite(cTopPin,0);
             pwmWrite(aBotPin,speedReference);
             pwmWrite(bBotPin,0);
@@ -198,7 +185,7 @@ void GOTSpeedController::commutationForwardDrive(int commutationPosition) {
         case 3:
             pwmWrite(aTopPin,0);
             pwmWrite(bTopPin,0);
-            pwmWrite(cTopPin,PWM_MAX);
+            pwmWrite(cTopPin,speedReference);
             pwmWrite(aBotPin,speedReference);
             pwmWrite(bBotPin,0);
             pwmWrite(cBotPin,0);
@@ -206,13 +193,13 @@ void GOTSpeedController::commutationForwardDrive(int commutationPosition) {
         case 2:
             pwmWrite(aTopPin,0);
             pwmWrite(bTopPin,0);
-            pwmWrite(cTopPin,PWM_MAX);
+            pwmWrite(cTopPin,speedReference);
             pwmWrite(aBotPin,0);
             pwmWrite(bBotPin,speedReference);
             pwmWrite(cBotPin,0);
             break;
         case 6:
-            pwmWrite(aTopPin,PWM_MAX);
+            pwmWrite(aTopPin,speedReference);
             pwmWrite(bTopPin,0);
             pwmWrite(cTopPin,0);
             pwmWrite(aBotPin,0);
@@ -220,7 +207,7 @@ void GOTSpeedController::commutationForwardDrive(int commutationPosition) {
             pwmWrite(cBotPin,0);
             break;
         case 4:
-            pwmWrite(aTopPin,PWM_MAX);
+            pwmWrite(aTopPin,speedReference);
             pwmWrite(bTopPin,0);
             pwmWrite(cTopPin,0);
             pwmWrite(aBotPin,0);
@@ -243,15 +230,15 @@ void GOTSpeedController::commutationReverseDrive(int commutationPosition) {
     switch (commutationPosition)
     {
         case 5:
-            pwmWrite(aTopPin,PWM_MAX);
+            pwmWrite(aTopPin,0);
             pwmWrite(bTopPin,0);
-            pwmWrite(cTopPin,0);
+            pwmWrite(cTopPin,speedReference);
             pwmWrite(aBotPin,0);
-            pwmWrite(bBotPin,0);
-            pwmWrite(cBotPin,speedReference);
+            pwmWrite(bBotPin,speedReference);
+            pwmWrite(cBotPin,0);
             break;
         case 1:
-            pwmWrite(aTopPin,PWM_MAX);
+            pwmWrite(aTopPin,speedReference);
             pwmWrite(bTopPin,0);
             pwmWrite(cTopPin,0);
             pwmWrite(aBotPin,0);
@@ -259,24 +246,24 @@ void GOTSpeedController::commutationReverseDrive(int commutationPosition) {
             pwmWrite(cBotPin,0);
             break;
         case 3:
-            pwmWrite(aTopPin,0);
+            pwmWrite(aTopPin,speedReference);
             pwmWrite(bTopPin,0);
-            pwmWrite(cTopPin,PWM_MAX);
+            pwmWrite(cTopPin,0);
             pwmWrite(aBotPin,0);
-            pwmWrite(bBotPin,speedReference);
-            pwmWrite(cBotPin,0);
+            pwmWrite(bBotPin,0);
+            pwmWrite(cBotPin,speedReference);
             break;
         case 2:
             pwmWrite(aTopPin,0);
-            pwmWrite(bTopPin,0);
-            pwmWrite(cTopPin,PWM_MAX);
-            pwmWrite(aBotPin,speedReference);
+            pwmWrite(bTopPin,speedReference);
+            pwmWrite(cTopPin,0);
+            pwmWrite(aBotPin,0);
             pwmWrite(bBotPin,0);
-            pwmWrite(cBotPin,0);
+            pwmWrite(cBotPin,speedReference);
             break;
         case 6:
             pwmWrite(aTopPin,0);
-            pwmWrite(bTopPin,PWM_MAX);
+            pwmWrite(bTopPin,speedReference);
             pwmWrite(cTopPin,0);
             pwmWrite(aBotPin,speedReference);
             pwmWrite(bBotPin,0);
@@ -284,11 +271,11 @@ void GOTSpeedController::commutationReverseDrive(int commutationPosition) {
             break;
         case 4:
             pwmWrite(aTopPin,0);
-            pwmWrite(bTopPin,PWM_MAX);
-            pwmWrite(cTopPin,0);
-            pwmWrite(aBotPin,0);
+            pwmWrite(bTopPin,0);
+            pwmWrite(cTopPin,speedReference);
+            pwmWrite(aBotPin,speedReference);
             pwmWrite(bBotPin,0);
-            pwmWrite(cBotPin,speedReference);
+            pwmWrite(cBotPin,0);
             break;
         default:
             pwmWrite(aTopPin,0);

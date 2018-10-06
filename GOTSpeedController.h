@@ -32,12 +32,15 @@
 #define PWM_MAX           2000
 
 // Drive Modes
-#define FORWARD_DRIVE     0
-#define FORWARD_BRAKE     1
-#define NO_DRIVE          2
-#define ESTOP             3
-#define REVERSE_BRAKE     4
-#define REVERSE_DRIVE     5
+#define FWD_DRIVE       0
+#define FWD_BRAKE_3SW   1
+#define FWD_BRAKE_1SW   2
+#define FWD_BRAKE_2SW   3
+#define NO_DRIVE        4
+#define REV_BRAKE_2SW   5
+#define REV_BRAKE_1SW   6
+#define REV_BRAKE_3SW   7
+#define REV_DRIVE       8
 
 class GOTSpeedController
 {
